@@ -1,32 +1,33 @@
 package tutorial.com.example.entity;
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "users")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private int id;
     private String name;
-    private int age;
     private String email;
-    private String phoneno;
+    private String age;
+    private String phoneNo;
     private String address;
 
-    // Constructors
     public User() {}
 
-    public User(String name, String email) {
+    public User(String name, String email, String age, String phoneNo, String address) {
         this.name = name;
         this.email = email;
+        this.age = age;
+        this.phoneNo = phoneNo;
+        this.address = address;
     }
 
-    // Getters and Setters
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -38,14 +39,6 @@ public class User {
         this.name = name;
     }
 
-    public int getAge() {
-        return age;
-    }
-
-    public void setAge(int age) {
-        this.age = age;
-    }
-
     public String getEmail() {
         return email;
     }
@@ -54,13 +47,20 @@ public class User {
         this.email = email;
     }
 
-
-    public String getPhoneno() {
-        return phoneno;
+    public String getAge() {
+        return age;
     }
 
-    public void setPhoneno(String phoneno) {
-        this.phoneno = phoneno;
+    public void setAge(String age) {
+        this.age = age;
+    }
+
+    public String getPhoneNo() {
+        return phoneNo;
+    }
+
+    public void setPhoneNo(String phoneNo) {
+        this.phoneNo = phoneNo;
     }
 
     public String getAddress() {

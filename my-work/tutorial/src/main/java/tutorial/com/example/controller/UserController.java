@@ -8,56 +8,43 @@ import tutorial.com.example.entity.User;
 import tutorial.com.example.service.UserService;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/user")
+@RequestMapping("/api")
 public class UserController {
     @Autowired
     private UserService userService;
 
-    // Get all users
-    @GetMapping
-    public List<User> getAllUsers() {
-        return userService.getAllUsers();
+    @RequestMapping(value = "/user", method = RequestMethod.POST)
+    public ResponseEntity<User> createUser(@RequestBody User user){
+        User response = userService.create(user);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    // Get user by ID
-    @GetMapping("/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable Long id) {
-        Optional<User> user = userService.getUserById(id);
-        if (user.isPresent()) {
-            return ResponseEntity.ok(user.get());
+    @RequestMapping(value = "/users", method = RequestMethod.GET)
+    public List<User> readUser(){
+       return userService.read();
+    }
+
+    @RequestMapping(value = "/user/{id}", method = RequestMethod.PUT)
+    public ResponseEntity<User> userUpdate(@PathVariable Integer id, @RequestBody User user){
+        if (userService.readById(id).isPresent()){
+            user.setId(id);
+            User response = userService.update(user);
+            return ResponseEntity.ok(response);
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
 
-    // Create a new user
-    @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody User user) {
-        User createdUser = userService.saveUser(user);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
-    }
-
-    // Update an existing user
-    @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User user) {
-        if (userService.getUserById(id).isPresent()) {
-            user.setId(id);
-            User updatedUser = userService.saveUser(user);
-            return ResponseEntity.ok(updatedUser);
-        }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-    }
-
-    // Delete a user
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
-        if (userService.getUserById(id).isPresent()) {
-            userService.deleteUser(id);
+    @RequestMapping(value = "/user/{id}", method = RequestMethod.DELETE)
+    public ResponseEntity<Void> userDelete(@PathVariable Integer id) {
+        if(userService.readById(id).isPresent()) {
+            userService.delete(id);
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        } else  {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
+
 }
