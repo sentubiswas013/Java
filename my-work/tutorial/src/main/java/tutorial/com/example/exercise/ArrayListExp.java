@@ -11,7 +11,7 @@ public class ArrayListExp {
         languages.add("python");
         languages.add("Html");
 
-        System.out.println("Hello world - "+ languages.get(2));
+        System.out.println("Hello world - "+ languages);
         languages.set(2, "Hello");
         languages.remove(3);
 
